@@ -34,16 +34,6 @@ class ViewController: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Avatar"
-        
-        guard let navigationBar = navigationController?.navigationBar else { return }
-        
-        for subview in navigationBar.subviews {
-            let stringFromClass = NSStringFromClass(subview.classForCoder)
-            print(stringFromClass)
-            if stringFromClass.contains("UINavigationBarLargeTitleView") {
-                subview.addSubview(imageView)
-            }
-        }
     
         view.addSubview(scrollView)
         
@@ -64,17 +54,18 @@ class ViewController: UIViewController {
         for subview in navigationBar.subviews {
             let stringFromClass = NSStringFromClass(subview.classForCoder)
             print(stringFromClass)
-            if stringFromClass.contains("UINavigationBarLargeTitleView") {
+            if stringFromClass.contains("UINavigationBarLargeTitleView"),
+               !subview.subviews.contains(imageView) {
                 subview.addSubview(imageView)
+                NSLayoutConstraint.activate([
+                    imageView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor,constant: -10),
+                    imageView.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor, constant: -30),
+                    imageView.widthAnchor.constraint(equalToConstant: 36),
+                    imageView.heightAnchor.constraint(equalToConstant: 36)
+                ])
             }
         }
         
-        NSLayoutConstraint.activate([
-            imageView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor,constant: -10),
-            imageView.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -30),
-            imageView.widthAnchor.constraint(equalToConstant: 36),
-            imageView.heightAnchor.constraint(equalToConstant: 36)
-        ])
     }
     
     func configureNavigation() {
